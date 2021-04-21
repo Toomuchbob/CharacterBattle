@@ -6,7 +6,7 @@ namespace CharacterBattle
 {
     class NPC
     {
-        private string Name;
+        public string Name;
         public int HP;
         private int STR;
         private int T;
@@ -25,17 +25,19 @@ namespace CharacterBattle
             Behavior = r.Next(1, 10) * 2 + 60; // How often the NPC will block
         }
 
-        private int Attack(int wS)
+        public int Attack(PlayerCharacter pc)
         {
             Random r = new Random();
 
             int roll = r.Next(1, 100);
 
-            int sR = (wS - roll) / 10;
+            int sR = (this.WS - roll) / 10;
 
-            if (roll <= wS)
+            if (roll <= this.WS)
             {
-                Console.WriteLine($"{Name}'s attack succeeded! with a success rating of {sR}");
+                Console.WriteLine($"{Name}'s attack succeeded! with a success rating of {sR}.");
+                Console.WriteLine($"{Name} dealt {STR + sR} damage!");
+                pc.HP -= this.STR + sR;
                 return sR;
             }
             Console.WriteLine($"{Name}'s Attack failed!");

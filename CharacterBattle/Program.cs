@@ -20,6 +20,7 @@ namespace CharacterBattle
         {
             Console.WriteLine("Please enter a name for your character: ");
             var name = Console.ReadLine();
+            Console.WriteLine("");
 
             PlayerCharacter newCharacter = new PlayerCharacter(name);
             newCharacter.ReadStats();
@@ -31,6 +32,7 @@ namespace CharacterBattle
         {
             do
             {
+                Console.WriteLine("");
                 Console.WriteLine("Welcome to Fantasy Battle!");
                 Console.WriteLine("");
                 Console.WriteLine("1. Create a character");
@@ -72,12 +74,20 @@ namespace CharacterBattle
 
         private static void StartBattle(PlayerCharacter pc)
         {
+            if (PlayerCharacter == null) CreateNewCharacter();
+
             CreateNewNPC();
 
             do
             {
                 PlayerCharacter.Attack(NPC);
+                NPC.Attack(PlayerCharacter);
             } while (PlayerCharacter.HP > 0 && NPC.HP > 0);
+
+            Console.WriteLine($"Battle over!");
+            Console.WriteLine($"{PlayerCharacter.Name}'s HP: {PlayerCharacter.HP}");
+            Console.WriteLine($"{NPC.Name}'s HP: {NPC.HP}");
+            Console.WriteLine("");
         }
 
         private static void CreateNewNPC()

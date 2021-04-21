@@ -4,7 +4,7 @@ namespace CharacterBattle
 {
     class PlayerCharacter
     {
-        private string Name;
+        public string Name;
         public int HP;
         public int STR;
         private int T;
@@ -31,7 +31,8 @@ namespace CharacterBattle
 
             if (roll <= this.WS)
             {
-                Console.WriteLine($"{Name}'s attack succeeded! with a success rating of {sR}");
+                Console.WriteLine($"{Name}'s attack succeeded! with a success rating of {sR}.");
+                Console.WriteLine($"{Name} dealt {STR + sR} damage!");
                 npc.HP -= this.STR + sR;
                 return sR;
             }
@@ -46,6 +47,7 @@ namespace CharacterBattle
             Console.WriteLine($"STR: {STR}");
             Console.WriteLine($"T: {T}");
             Console.WriteLine($"WS: {WS}");
+            Console.WriteLine("");
         }
     }
 }
