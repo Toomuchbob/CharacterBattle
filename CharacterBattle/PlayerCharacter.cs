@@ -5,8 +5,8 @@ namespace CharacterBattle
     class PlayerCharacter
     {
         private string Name;
-        private int HP;
-        private int STR;
+        public int HP;
+        public int STR;
         private int T;
         private int WS;
 
@@ -15,26 +15,27 @@ namespace CharacterBattle
             Random r = new Random();
 
             Name = name;
-            HP = r.Next(1, 10) + 20;
+            HP = r.Next(1, 10) + 100;
             STR = r.Next(1, 10) + 30;
             T = r.Next(1, 10) * 2 + 30;
             WS = r.Next(1, 10) * 2 + 40;
         }
 
-        private int Attack(int wS)
+        public int Attack(NPC npc)
         {
             Random r = new Random();
 
             int roll = r.Next(1, 100);
 
-            int sR = (wS - roll) / 10;
+            int sR = (this.WS - roll) / 10;
 
-            if (roll <= wS)
+            if (roll <= this.WS)
             {
-                Console.WriteLine($"Attack success! with a success rating of {sR}");
+                Console.WriteLine($"{Name}'s attack succeeded! with a success rating of {sR}");
+                npc.HP -= this.STR + sR;
                 return sR;
             }
-            Console.WriteLine("Attack failed!");
+            Console.WriteLine($"{Name}'s Attack failed!");
             return sR;
         }
 
@@ -46,6 +47,5 @@ namespace CharacterBattle
             Console.WriteLine($"T: {T}");
             Console.WriteLine($"WS: {WS}");
         }
-
     }
 }

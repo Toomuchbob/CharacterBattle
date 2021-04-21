@@ -6,6 +6,7 @@ namespace CharacterBattle
     class Program
     {
         static PlayerCharacter PlayerCharacter;
+        static NPC NPC;
         static Regex option = new Regex("[1-3]");
         static Match m;
         static string playerChoiceString;
@@ -71,7 +72,18 @@ namespace CharacterBattle
 
         private static void StartBattle(PlayerCharacter pc)
         {
-            
+            CreateNewNPC();
+
+            do
+            {
+                PlayerCharacter.Attack(NPC);
+            } while (PlayerCharacter.HP > 0 && NPC.HP > 0);
+        }
+
+        private static void CreateNewNPC()
+        {
+            NPC npc = new NPC("Goblin");
+            NPC = npc;
         }
     }
 }
