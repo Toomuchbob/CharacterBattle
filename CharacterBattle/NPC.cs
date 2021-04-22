@@ -4,16 +4,9 @@ using System.Text;
 
 namespace CharacterBattle
 {
-    class NPC
+    class NPC : Character
     {
-        public string Name;
-        public int HP;
-        private int STR;
-        private int T;
-        private int WS;
-        private int Behavior;
-
-        public NPC(string name)
+        public NPC(string name) : base(name)
         {
             Random r = new Random();
 
@@ -22,10 +15,9 @@ namespace CharacterBattle
             STR = r.Next(1, 10) + 20; // Strength
             T = r.Next(1, 10) * 2 + 20; // Toughness
             WS = r.Next(1, 10) * 2 + 30; // Weapon Skill
-            Behavior = r.Next(1, 10) * 2 + 60; // How often the NPC will block
         }
 
-        public int Attack(PlayerCharacter pc)
+        public int Attack(Character character)
         {
             Random r = new Random();
 
@@ -37,7 +29,7 @@ namespace CharacterBattle
             {
                 Console.WriteLine($"{Name}'s attack succeeded! with a success rating of {sR}.");
                 Console.WriteLine($"{Name} dealt {STR + sR} damage!");
-                pc.HP -= this.STR + sR;
+                character.HP -= this.STR + sR;
                 return sR;
             }
             Console.WriteLine($"{Name}'s Attack failed!");

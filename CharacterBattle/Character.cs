@@ -2,15 +2,10 @@
 
 namespace CharacterBattle
 {
-    class PlayerCharacter
+    class Character : ICharacter
     {
-        public string Name;
-        public int HP;
-        public int STR;
-        private int T;
-        private int WS;
 
-        public PlayerCharacter(string name)
+        public Character(string name)
         {
             Random r = new Random();
 
@@ -21,7 +16,13 @@ namespace CharacterBattle
             WS = r.Next(1, 10) * 2 + 40;
         }
 
-        public int Attack(NPC npc)
+        public string Name { get; set; }
+        public int HP { get; set; }
+        public int STR { get; set; }
+        public int T { get; set; }
+        public int WS { get; set; }
+
+        public int Attack(ICharacter character)
         {
             Random r = new Random();
 
@@ -33,7 +34,7 @@ namespace CharacterBattle
             {
                 Console.WriteLine($"{Name}'s attack succeeded! with a success rating of {sR}.");
                 Console.WriteLine($"{Name} dealt {STR + sR} damage!");
-                npc.HP -= this.STR + sR;
+                character.HP -= this.STR + sR;
                 return sR;
             }
             Console.WriteLine($"{Name}'s Attack failed!");

@@ -5,7 +5,7 @@ namespace CharacterBattle
 {
     class Program
     {
-        static PlayerCharacter PlayerCharacter;
+        static Character PlayerCharacter;
         static NPC NPC;
         static Regex option = new Regex("[1-3]");
         static Match m;
@@ -22,7 +22,7 @@ namespace CharacterBattle
             var name = Console.ReadLine();
             Console.WriteLine("");
 
-            PlayerCharacter newCharacter = new PlayerCharacter(name);
+            Character newCharacter = new Character(name);
             newCharacter.ReadStats();
 
             PlayerCharacter = newCharacter;
@@ -59,7 +59,7 @@ namespace CharacterBattle
                     CreateNewCharacter();
                     break;
                 case 2:
-                    StartBattle(PlayerCharacter);
+                    StartBattle();
                     break;
                 case 3:
                     Environment.Exit(0);
@@ -72,7 +72,7 @@ namespace CharacterBattle
             Menu();
         }
 
-        private static void StartBattle(PlayerCharacter pc)
+        private static void StartBattle()
         {
             if (PlayerCharacter == null) CreateNewCharacter();
 
