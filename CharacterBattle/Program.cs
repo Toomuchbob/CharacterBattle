@@ -1,22 +1,24 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 namespace CharacterBattle
 {
     class Program
     {
-        static Character PlayerCharacter;
         static NPC NPC;
         static Regex option = new Regex("[1-3]");
         static Match m;
-        static string playerChoiceString;
 
         static void Main(string[] args)
         {
-            Menu();
+            List<Character> characters = new List<Character>();
+
+            Menu(characters);
+
         }
 
-        private static void CreateNewCharacter()
+        private static Character CreateNewCharacter()
         {
             Console.WriteLine("Please enter a name for your character: ");
             var name = Console.ReadLine();
@@ -25,11 +27,14 @@ namespace CharacterBattle
             Character newCharacter = new Character(name);
             newCharacter.ReadStats();
 
-            PlayerCharacter = newCharacter;
+            return newCharacter;
         }
 
-        private static void Menu()
+        private static void Menu(List<Character> characters)
         {
+
+            string playerChoiceString;
+
             do
             {
                 Console.WriteLine("");
@@ -56,10 +61,10 @@ namespace CharacterBattle
             switch (int.Parse(playerChoiceString))
             {
                 case 1:
-                    CreateNewCharacter();
+                    characters.Add(CreateNewCharacter());
                     break;
                 case 2:
-                    StartBattle();
+                    StartBattle(characters);
                     break;
                 case 3:
                     Environment.Exit(0);
@@ -69,23 +74,26 @@ namespace CharacterBattle
                     break;
             }
 
-            Menu();
+            Menu(characters);
+
         }
 
-        private static void StartBattle()
+        private static void StartBattle(List<Character> characters)
         {
-            if (PlayerCharacter == null) CreateNewCharacter();
+            if (characters.Count <= 0) characters.Add(CreateNewCharacter());
+
+            var playerCharacter = characters[0];
 
             CreateNewNPC();
 
             do
             {
-                PlayerCharacter.Attack(NPC);
-                NPC.Attack(PlayerCharacter);
-            } while (PlayerCharacter.HP > 0 && NPC.HP > 0);
+                playerCharacter.Attack(NPC);
+                NPC.Attack(playerCharacter);
+            } while (playerCharacter.HP > 0 && NPC.HP > 0);
 
             Console.WriteLine($"Battle over!");
-            Console.WriteLine($"{PlayerCharacter.Name}'s HP: {PlayerCharacter.HP}");
+            Console.WriteLine($"{playerCharacter.Name}'s HP: {playerCharacter.HP}");
             Console.WriteLine($"{NPC.Name}'s HP: {NPC.HP}");
             Console.WriteLine("");
         }
