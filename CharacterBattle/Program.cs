@@ -7,8 +7,6 @@ namespace CharacterBattle
     class Program
     {
         static NPC NPC;
-        static Regex option = new Regex("[1-3]");
-        static Match m;
 
         static void Main(string[] args)
         {
@@ -32,11 +30,6 @@ namespace CharacterBattle
 
         private static void Menu(List<Character> characters)
         {
-
-            string playerChoiceString;
-
-            do
-            {
                 Console.WriteLine("");
                 Console.WriteLine("Welcome to Fantasy Battle!");
                 Console.WriteLine("");
@@ -45,20 +38,9 @@ namespace CharacterBattle
                 Console.WriteLine("3. Quit game");
                 Console.WriteLine("");
 
-                var playerChoice = Console.ReadKey(true);
+            var choice = SelectOption();
 
-                playerChoiceString = playerChoice.KeyChar.ToString();
-                m = option.Match(playerChoiceString);
-
-                if (!m.Success)
-                {
-                    Console.WriteLine("Please choose between option 1-3!");
-                    Console.WriteLine("");
-                }
-
-            } while (!m.Success);
-
-            switch (int.Parse(playerChoiceString))
+            switch (choice)
             {
                 case 1:
                     characters.Add(CreateNewCharacter());
@@ -84,6 +66,8 @@ namespace CharacterBattle
 
             var playerCharacter = characters[0];
 
+            CharacterSelect(characters);
+
             CreateNewNPC();
 
             do
@@ -98,10 +82,46 @@ namespace CharacterBattle
             Console.WriteLine("");
         }
 
+        private static Character CharacterSelect(List<Character> characters)
+        {
+            Console.WriteLine("Please select a character:");
+            Console.WriteLine("");
+
+            foreach (var character in characters)
+            {
+                Console.WriteLine($"{characters.IndexOf(character) + 1}. {character.Name}");
+            }
+            Console.WriteLine("");
+
+            var choice = SelectOption();
+
+            return characters[choice];
+        }
+
         private static void CreateNewNPC()
         {
             NPC npc = new NPC("Goblin");
             NPC = npc;
+        }
+
+        private static int SelectOption()
+        {
+            Regex option = new Regex("[0-3]");
+            Match m;
+
+            var playerChoice = Console.ReadKey(true);
+
+            string playerChoiceString = playerChoice.KeyChar.ToString();
+            m = option.Match(playerChoiceString);
+
+            do
+            {
+                Console.WriteLine("Please choose an available option!");
+                Console.WriteLine("");
+
+            } while (!m.Success);
+
+            return int.Parse(playerChoiceString) - 1;
         }
     }
 }
