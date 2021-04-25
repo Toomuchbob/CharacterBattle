@@ -7,13 +7,13 @@ namespace CharacterBattle
     class Program
     {
         static NPC NPC;
+        static List<string> Options = new List<string> { "Create a character", "Start new game", "Quit game" };
 
         static void Main(string[] args)
         {
             List<Character> characters = new List<Character>();
 
             Menu(characters);
-
         }
 
         private static Character CreateNewCharacter()
@@ -30,25 +30,20 @@ namespace CharacterBattle
 
         private static void Menu(List<Character> characters)
         {
-                Console.WriteLine("");
-                Console.WriteLine("Welcome to Fantasy Battle!");
-                Console.WriteLine("");
-                Console.WriteLine("1. Create a character");
-                Console.WriteLine("2. Start new game");
-                Console.WriteLine("3. Quit game");
-                Console.WriteLine("");
+            Console.WriteLine("Welcome to Fantasy Battle!");
+            Console.WriteLine("");
 
-            var choice = SelectOption();
+            var choice = SelectOption(Options);
 
             switch (choice)
             {
-                case 1:
+                case 0:
                     characters.Add(CreateNewCharacter());
                     break;
-                case 2:
+                case 1:
                     StartBattle(characters);
                     break;
-                case 3:
+                case 2:
                     Environment.Exit(0);
                     break;
                 default:
@@ -57,16 +52,13 @@ namespace CharacterBattle
             }
 
             Menu(characters);
-
         }
 
         private static void StartBattle(List<Character> characters)
         {
             if (characters.Count <= 0) characters.Add(CreateNewCharacter());
 
-            var playerCharacter = characters[0];
-
-            CharacterSelect(characters);
+            var playerCharacter = CharacterSelect(characters);
 
             CreateNewNPC();
 
@@ -87,13 +79,8 @@ namespace CharacterBattle
             Console.WriteLine("Please select a character:");
             Console.WriteLine("");
 
-            foreach (var character in characters)
-            {
-                Console.WriteLine($"{characters.IndexOf(character) + 1}. {character.Name}");
-            }
-            Console.WriteLine("");
-
-            var choice = SelectOption();
+            // return selected option(int) from Select Option
+            var choice = SelectOption(characters);
 
             return characters[choice];
         }
@@ -104,23 +91,46 @@ namespace CharacterBattle
             NPC = npc;
         }
 
-        private static int SelectOption()
+        private static int SelectOption<T>(List<T> items)
         {
-            Regex option = new Regex("[0-3]");
+            //use Regex to verify what choice they made
+            Regex option = new Regex($"[1-{items.Count}]");
             Match m;
-
-            var playerChoice = Console.ReadKey(true);
-
-            string playerChoiceString = playerChoice.KeyChar.ToString();
-            m = option.Match(playerChoiceString);
+            string playerChoiceString;
 
             do
             {
-                Console.WriteLine("Please choose an available option!");
+
+                // use pattern matching to identify List of Characters, else...
+                foreach (var item in items)
+                {
+                    if (item is Character c)
+                    {
+                        Console.WriteLine($"{items.IndexOf(item) + 1}. {c.Name}");
+                    }
+                    else
+                    {
+                    Console.WriteLine($"{items.IndexOf(item) + 1}. {item}");
+                    }
+                    
+                }
+
                 Console.WriteLine("");
+
+                var playerChoice = Console.ReadKey(true);
+
+                playerChoiceString = playerChoice.KeyChar.ToString();
+                m = option.Match(playerChoiceString);
+
+                if (!m.Success)
+                {
+                    Console.WriteLine($"Please choose an option from 1-{items.Count}!");
+                    Console.WriteLine("");
+                };
 
             } while (!m.Success);
 
+            // return option, less one, as collections are indexed starting at 0
             return int.Parse(playerChoiceString) - 1;
         }
     }
